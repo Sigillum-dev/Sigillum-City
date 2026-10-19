@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   MotionHeader,
   MotionPage,
@@ -36,6 +36,7 @@ import {
   shortHash,
 } from './format';
 import { Badge, Empty, Tip } from './ui';
+import { AnimatedNumber } from './animated-number';
 
 // Warna sesuai palet Sigillum (sama dengan donut landing & bar split di drawer Mind).
 const C = {
@@ -530,7 +531,7 @@ function SupplyBlock({
                   )}
                 </td>
                 <td className="py-1.5 text-right font-mono text-[12px]">
-                  {fmtWageUnit(b.amount)}
+                  <AnimatedNumber value={b.amount} format={(n) => fmtWageUnit(n)} />
                 </td>
                 <td className="py-1.5 text-right font-mono text-[12px]">
                   {b.pct.toFixed(2)}%
@@ -599,7 +600,9 @@ function FlowRow({
           }}
         />
       </div>
-      <span className="font-mono text-[12px]">{fmtWageUnit(value)}</span>
+      <span className="font-mono text-[12px]">
+        <AnimatedNumber value={value} format={(n) => fmtWageUnit(n)} />
+      </span>
     </div>
   );
 }
@@ -678,7 +681,9 @@ function FlowBlock({ flow }: { flow: Summary['flow'] }) {
           ] as const
         ).map(([k, v]) => (
           <div key={k} className="rounded-panel border border-line-2 bg-[rgba(16,21,31,0.5)] py-1.5">
-            <div className="font-display text-[16px] text-text">{v}</div>
+            <div className="font-display text-[16px] text-text">
+              <AnimatedNumber value={v} format={(n) => String(Math.round(n))} duration={0.9} />
+            </div>
             {k}
           </div>
         ))}
@@ -695,17 +700,17 @@ function FurnaceBlock({ f, win }: { f: Summary['furnace']; win: Win }) {
           label="Burned (all time)"
           tip="Balance of the dead address (0x…dEaD) + zero address, same as Blockscout."
           href={explorerAddress(ADDRESSES.furnace)}
-          value={fmtWageUnit(f.burnedAllTime)}
+          value={<AnimatedNumber value={f.burnedAllTime} format={(n) => fmtWageUnit(n)} />}
         />
         <Stat
           label={`Burned ${win === 'all' ? '(all)' : `(${win})`}`}
           tip="Σ Burned events from the Splitter in this window."
-          value={fmtWageUnit(f.burnedInWindow)}
+          value={<AnimatedNumber value={f.burnedInWindow} format={(n) => fmtWageUnit(n)} />}
         />
         <Stat
           label="% of supply"
           tip="Burned ÷ 1,000,000,000."
-          value={`${f.pctOfSupply.toFixed(4)}%`}
+          value={<AnimatedNumber value={f.pctOfSupply} format={(n) => `${n.toFixed(4)}%`} />}
         />
       </div>
       {f.daily.length ? (
@@ -751,7 +756,7 @@ const Stat = ({
   href,
 }: {
   label: string;
-  value: string;
+  value: ReactNode;
   tip: string;
   href?: string;
 }) => (

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useRef, useState, type CSSProperties } from "react";
+import { useInView } from "motion/react";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Panel } from "@/components/ui/panel";
 import { H2, Lede, Section } from "@/components/landing/section";
@@ -20,6 +21,9 @@ const fmt = (n: number) => n.toLocaleString("en-US", { maximumFractionDigits: 2 
 export function Economy() {
   const [wage, setWage] = useState(DEFAULT_WAGE);
   const [active, setActive] = useState<number | null>(null);
+  // Donut menggambar dirinya sekali saat masuk layar (segmen berurutan, searah jarum jam).
+  const donutRef = useRef<SVGSVGElement>(null);
+  const drawn = useInView(donutRef, { once: true, margin: "0px 0px -20% 0px" });
   const segs = ECONOMY.segments.map((s, i) => {
     const pct = WAGE_SPLIT[s.key];
     const before = ECONOMY.segments
@@ -89,6 +93,7 @@ export function Economy() {
         <Panel ticks className="rv d1">
           <div className="grid grid-cols-1 items-center justify-items-center gap-[34px] p-9 min-[860px]:grid-cols-[auto_1fr] min-[860px]:justify-items-stretch">
             <svg
+              ref={donutRef}
               viewBox="0 0 220 220"
               role="img"
               aria-label="Split of one sealed SGUM"
@@ -105,7 +110,7 @@ export function Economy() {
                     fill="none"
                     stroke={s.hex}
                     strokeWidth={active === i ? 15 : 10}
-                    strokeDasharray={`${s.len} ${C - s.len}`}
+                    strokeDasharray={`${drawn ? s.len : 0} ${C - (drawn ? s.len : 0)}`}
                     strokeDashoffset={s.offset}
                     tabIndex={0}
                     aria-label={`${s.label} ${s.pct}%`}
@@ -113,8 +118,9 @@ export function Economy() {
                     onMouseLeave={() => setActive(null)}
                     onFocus={() => setActive(i)}
                     onBlur={() => setActive(null)}
-                    className="cursor-pointer outline-none transition-[stroke-width,opacity] duration-300"
+                    className="cursor-pointer outline-none motion-reduce:!transition-none"
                     style={{
+                      transition: `stroke-dasharray 1.1s cubic-bezier(.22,1,.36,1) ${i * 0.18}s, stroke-width .3s, opacity .3s`,
                       filter: `drop-shadow(0 0 6px ${s.hex})`,
                       opacity: active === null || active === i ? 1 : 0.3,
                     }}

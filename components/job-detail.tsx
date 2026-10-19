@@ -15,6 +15,7 @@ import { buildContinueDraft, saveContinueDraft } from '@/lib/continue-job';
 import { activeChain } from '@/lib/web3/chains';
 import { sendBack, setTheSeal } from '@/lib/web3/set-the-seal';
 import { ConnectWalletLink } from '@/components/wallet-connect';
+import { SigilStamp } from '@/components/sigil-stamp';
 import type { JobSummary, Rank } from '@/types/domain';
 
 export interface JobDetailEvent {
@@ -119,6 +120,7 @@ export function JobDetail({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [step, setStep] = useState<string | undefined>();
+  const [sigilTick, setSigilTick] = useState(0);
 
   async function callAction(
     path: 'approve' | 'revise',
@@ -136,6 +138,7 @@ export function JobDetail({
           setStep,
           typeof noteOrRating === 'number' ? noteOrRating : undefined,
         );
+        setSigilTick((n) => n + 1);
       } else {
         const note = typeof noteOrRating === 'string' ? noteOrRating : '';
         await sendBack(job, note, setStep);
@@ -321,6 +324,7 @@ export function JobDetail({
           : 'mx-auto flex w-full max-w-xl shrink-0 flex-col gap-3'
       }
     >
+      <SigilStamp trigger={sigilTick} />
       {sideBySide ? (
         <div className="grid shrink-0 grid-cols-1 gap-3 lg:grid-cols-2 lg:items-stretch">
           {jobPanel}

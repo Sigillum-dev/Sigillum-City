@@ -10,8 +10,22 @@ import { WARD_LABEL } from "@/types/domain";
 import type { DistrictId } from "@/types/domain";
 import { MotionHeader, MotionPage } from "@/components/motion/primitives";
 import { SiteFooter } from "@/components/site-footer";
+import { WAGE_SPLIT } from "@/lib/currency";
 
 const VALID_DISTRICTS = Object.keys(WARD_LABEL) as DistrictId[];
+
+const STEPS = [
+  { title: "Lock", body: "Your SGUM goes into the Vault (escrow)." },
+  { title: "Work", body: "A Mind takes the job and delivers." },
+  { title: "Sigil", body: "You review, then press the Sigil to pay." },
+];
+
+const SPLIT = [
+  { label: "Patrons", pct: WAGE_SPLIT.patronsPct, bar: "bg-gold" },
+  { label: "Grid reserve", pct: WAGE_SPLIT.lampOilPct, bar: "bg-gold/60" },
+  { label: "Civic fund", pct: WAGE_SPLIT.tithePct, bar: "bg-gold/35" },
+  { label: "Burned", pct: WAGE_SPLIT.furnacePct, bar: "bg-crit/70" },
+];
 
 export default async function PostJobPage({
   searchParams,
@@ -41,27 +55,68 @@ export default async function PostJobPage({
 
   return (
     <MotionPage className="flex h-screen flex-col gap-3 px-gutter pt-[78px] pb-3">
+      <div className="flex flex-1 items-start justify-center overflow-auto py-2 lg:items-center">
+        <div className="grid w-full max-w-5xl gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12">
+          {/* Kolom kiri: konteks. Clarity rule (lore file §8): pertama kali istilah
+              lore muncul di layar, sandingkan dengan arti polosnya (jadi lede). */}
+          <div className="flex flex-col gap-6">
+            <MotionHeader>
+              <PageHead
+                eyebrow="The Gate"
+                title={
+                  <>
+                    Post a <em>job</em>
+                  </>
+                }
+                lede="The Gate: where clients enter to post jobs. The SGUM locks in the Vault (escrow) the moment you submit, and stays there until a Mind delivers and you press the Sigil."
+                action={
+                  <Link href="/jobs">
+                    <Button size="small">Cancel</Button>
+                  </Link>
+                }
+              />
+            </MotionHeader>
 
-      <div className="flex flex-1 items-start justify-center overflow-auto py-2">
-        <div className="w-full max-w-xl">
-          {/* Clarity rule (lore file §8): pertama kali istilah lore muncul
-              di layar, sandingkan dengan arti polosnya (jadi lede di bawah). */}
-          <MotionHeader className="mb-5">
-            <PageHead
-              eyebrow="The Gate"
-              title={
-                <>
-                  Post a <em>job</em>
-                </>
-              }
-              lede="The Gate: where clients enter to post jobs. The SGUM locks in the Vault (escrow) the moment you submit, and stays there until a Mind delivers and you press the Sigil."
-              action={
-                <Link href="/jobs">
-                  <Button size="small">Cancel</Button>
-                </Link>
-              }
-            />
-          </MotionHeader>
+            <ol className="hidden flex-col gap-3 lg:flex">
+              {STEPS.map((s, i) => (
+                <li key={s.title} className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-gold/50 font-mono text-[11px] text-gold-2">
+                    {i + 1}
+                  </span>
+                  <span className="text-[13px] text-ink-2">
+                    <strong className="font-medium text-ink">{s.title}.</strong>{" "}
+                    {s.body}
+                  </span>
+                </li>
+              ))}
+            </ol>
+
+            <div className="hidden lg:block">
+              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-3">
+                Where the wage goes
+              </p>
+              <div className="flex h-2 overflow-hidden rounded-full bg-line-2">
+                {SPLIT.map((s) => (
+                  <div
+                    key={s.label}
+                    className={s.bar}
+                    style={{ width: `${s.pct}%` }}
+                    title={`${s.label} ${s.pct}%`}
+                  />
+                ))}
+              </div>
+              <ul className="mt-2.5 grid grid-cols-2 gap-x-4 gap-y-1 text-[12px] text-ink-3">
+                {SPLIT.map((s) => (
+                  <li key={s.label} className="flex justify-between">
+                    <span>{s.label}</span>
+                    <span className="font-mono text-ink-2">{s.pct}%</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Kolom kanan: form */}
           <Panel ticks>
             <PostJobClient
               initialDistrict={initialDistrict}

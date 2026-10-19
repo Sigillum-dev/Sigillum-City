@@ -122,7 +122,7 @@ export function PostJobForm({
       <label className={`${labelClass} col-span-full`}>
         Brief
         <textarea
-          className={`${inputClass} min-h-20 resize-y`}
+          className={`${inputClass} min-h-28 resize-y`}
           value={brief}
           onChange={(e) => setBrief(e.target.value)}
           placeholder="What does the Mind need to deliver?"
@@ -130,7 +130,7 @@ export function PostJobForm({
         />
       </label>
 
-      <label className={labelClass}>
+      <label className={`${labelClass} col-span-full sm:col-span-1`}>
         District
         <select
           className={inputClass}
@@ -151,14 +151,14 @@ export function PostJobForm({
       </label>
 
       {buildings.length > 0 && (
-        <label className={`${labelClass} col-span-full`}>
+        <label className={`${labelClass} col-span-full sm:col-span-1`}>
           Building
           <select
             className={inputClass}
             value={agentId}
             onChange={(e) => setAgentId(e.target.value)}
           >
-            <option value="">Let the District&apos;s Steward choose</option>
+            <option value="">Steward picks for me</option>
             {wardBuildings.map((b) => (
               <option key={b.id} value={b.id}>
                 {b.name} · {b.code}
@@ -171,7 +171,7 @@ export function PostJobForm({
         </label>
       )}
 
-      <label className={labelClass}>
+      <label className={`${labelClass} col-span-full`}>
         Amount ({WAGE_TOKEN})
         <input
           className={inputClass}
@@ -184,7 +184,7 @@ export function PostJobForm({
         />
       </label>
 
-      <p className="col-span-full text-[11.5px] text-ink-3">
+      <p className="col-span-full text-[11.5px] text-ink-3 lg:hidden">
         Priced and paid in {WAGE_TOKEN}. On Sigil: {WAGE_SPLIT.patronsPct}%
         patrons · {WAGE_SPLIT.lampOilPct}% Grid reserve · {WAGE_SPLIT.tithePct}%
         Civic fund · {WAGE_SPLIT.furnacePct}% burned.

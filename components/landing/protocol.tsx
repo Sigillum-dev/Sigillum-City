@@ -3,6 +3,7 @@ import { H2, Lede, Section } from "@/components/landing/section";
 import { PROTOCOL } from "@/components/landing/copy";
 import { WAGE_SPLIT } from "@/lib/currency";
 import { cn } from "@/lib/cn";
+import { TimelineProgress } from "@/components/landing/timeline-progress";
 
 const SPLIT_TEXT = [
   WAGE_SPLIT.patronsPct,
@@ -27,6 +28,7 @@ export function Protocol() {
           aria-hidden
           className="pointer-events-none absolute top-5 left-0 hidden h-[3px] w-[14%] animate-flow bg-[linear-gradient(90deg,transparent,var(--color-gold-2),transparent)] blur-[0.5px] min-[1100px]:block"
         />
+        <TimelineProgress />
         {PROTOCOL.steps.map((s, i) => (
           <li key={s.n} className={`rv d${Math.min(i, 5)} relative pr-[22px]`}>
             <div

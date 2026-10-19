@@ -16,6 +16,7 @@ import { JobCard } from '@/components/job-card';
 import { RevenueSplit } from '@/components/revenue-split';
 import { Sparkline } from '@/components/sparkline';
 import { PostJobForm } from '@/components/post-job-form';
+import { SigilStamp } from '@/components/sigil-stamp';
 
 const TABS: JobTab[] = [
   { id: 'review', label: 'Awaiting Sigil', count: 2, alert: true },
@@ -26,12 +27,17 @@ const TABS: JobTab[] = [
 
 export default function ComponentsDevPage() {
   const [tab, setTab] = useState('review');
+  const [sigilTick, setSigilTick] = useState(0);
 
   return (
     <main className="flex flex-col gap-6 p-6">
+      <SigilStamp trigger={sigilTick} />
       <header className="flex items-center gap-3">
         <h1 className="font-display text-xl font-bold">Komponen dasar</h1>
         <Badge>dev only</Badge>
+        <Button size="small" onClick={() => setSigilTick((n) => n + 1)}>
+          Preview Sigil effect
+        </Button>
       </header>
 
       {/* ===== CP2: galeri primitif gaya Sigillum ===== */}
@@ -183,7 +189,7 @@ export default function ComponentsDevPage() {
                 progress: 100,
               }}
               isOwnJob
-              onSetSeal={() => alert('Sigil pressed')}
+              onSetSeal={() => setSigilTick((n) => n + 1)}
               onSendBack={() => alert('sent back')}
             />
             <JobCard

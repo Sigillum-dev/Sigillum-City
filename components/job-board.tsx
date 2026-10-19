@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { JobTabs, type JobTab } from '@/components/job-tabs';
 import { JobCard } from '@/components/job-card';
 import { sendBack, setTheSeal } from '@/lib/web3/set-the-seal';
+import { SigilStamp } from '@/components/sigil-stamp';
 import { ConnectWalletLink } from '@/components/wallet-connect';
 import { itemVariants } from '@/components/motion/primitives';
 import type { Variants } from 'motion/react';
@@ -66,6 +67,7 @@ export function JobBoard({
   const [pending, setPending] = useState<Record<string, boolean>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [steps, setSteps] = useState<Record<string, string | undefined>>({});
+  const [sigilTick, setSigilTick] = useState(0);
 
   const counts = useMemo(() => {
     const c: Record<TabId, number> = {
@@ -109,6 +111,7 @@ export function JobBoard({
           (label) => setSteps((s) => ({ ...s, [jobId]: label })),
           typeof noteOrRating === 'number' ? noteOrRating : undefined,
         );
+        setSigilTick((n) => n + 1);
       } else {
         const note = typeof noteOrRating === 'string' ? noteOrRating : '';
         await sendBack(job, note, (label) =>
@@ -131,6 +134,7 @@ export function JobBoard({
 
   return (
     <Panel ticks className="h-full">
+      <SigilStamp trigger={sigilTick} />
       {showHeader && (
         <PanelHeader
           title="Your jobs"
