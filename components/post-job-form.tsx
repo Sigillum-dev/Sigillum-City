@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
 import { FIELD_HINT, FIELD_INPUT, FIELD_LABEL } from '@/components/ui/field';
 import { WARD_LABEL } from '@/types/domain';
 import { WAGE_SPLIT, WAGE_TOKEN } from '@/lib/currency';
@@ -132,39 +133,35 @@ export function PostJobForm({
 
       <label className={`${labelClass} col-span-full sm:col-span-1`}>
         District
-        <select
-          className={inputClass}
+        <Select
           value={chosen ? chosen.district : district}
-          onChange={(e) => {
-            const next = e.target.value as DistrictId;
+          onChange={(v) => {
+            const next = v as DistrictId;
             setDistrict(next);
             // Ganti Ward yang tidak cocok dengan bangunan terpilih -> kembali ke Warden.
             if (chosen && chosen.district !== next) setAgentId('');
           }}
-        >
-          {Object.entries(WARD_LABEL).map(([id, label]) => (
-            <option key={id} value={id}>
-              {label}
-            </option>
-          ))}
-        </select>
+          options={Object.entries(WARD_LABEL).map(([id, label]) => ({
+            value: id,
+            label,
+          }))}
+        />
       </label>
 
       {buildings.length > 0 && (
         <label className={`${labelClass} col-span-full sm:col-span-1`}>
           Building
-          <select
-            className={inputClass}
+          <Select
             value={agentId}
-            onChange={(e) => setAgentId(e.target.value)}
-          >
-            <option value="">Steward picks for me</option>
-            {wardBuildings.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.name} · {b.code}
-              </option>
-            ))}
-          </select>
+            onChange={setAgentId}
+            options={[
+              { value: '', label: "Steward picks for me" },
+              ...wardBuildings.map((b) => ({
+                value: b.id,
+                label: `${b.name} · ${b.code}`,
+              })),
+            ]}
+          />
           <span className={FIELD_HINT}>
             {`Optional. Pick a building to hire it directly; its patrons share the ${WAGE_SPLIT.patronsPct}% patron cut when you press the Sigil.`}
           </span>

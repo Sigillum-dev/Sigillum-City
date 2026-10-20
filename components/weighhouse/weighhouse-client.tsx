@@ -14,7 +14,6 @@ import { cn } from '@/lib/cn';
 import { useRealtimeChanges } from '@/lib/supabase/realtime';
 import {
   ADDRESSES,
-  PONS_TOKEN_URL,
   explorerAddress,
   explorerToken,
   explorerTx,
@@ -433,7 +432,6 @@ export function WeighhouseClient({
       </Panel>
 
       <SiteFooter note={TERMS.footerNote}>
-        <CaBlock />
         <p className="text-[11px] text-ink-3">Market data is informational. Not financial advice.</p>
       </SiteFooter>
     </MotionPage>
@@ -888,47 +886,3 @@ function LedgerTable({ rows }: { rows: LedgerRow[] }) {
   );
 }
 
-function CaBlock() {
-  const [copied, setCopied] = useState(false);
-  const ca = ADDRESSES.wageToken;
-  return (
-    <div className="flex max-w-full flex-wrap items-center justify-center gap-2">
-      <span className="text-muted">$SGUM CA</span>
-      <code className="max-w-full break-all rounded bg-surface-2 px-2 py-1 font-mono text-[11px] text-text">
-        {ca}
-      </code>
-      <button
-        className="rounded-full border border-line px-2 py-0.5 text-[11px] text-muted hover:text-text"
-        onClick={async () => {
-          try {
-            await navigator.clipboard.writeText(ca);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1500);
-          } catch {
-            /* clipboard diblokir */
-          }
-        }}
-      >
-        {copied ? 'Copied' : 'Copy'}
-      </button>
-      <a
-        className="text-gold hover:underline"
-        target="_blank"
-        rel="noreferrer"
-        href={explorerToken(ca)}
-      >
-        Blockscout ↗
-      </a>
-      {PONS_TOKEN_URL && (
-        <a
-          className="text-gold hover:underline"
-          target="_blank"
-          rel="noreferrer"
-          href={PONS_TOKEN_URL}
-        >
-          Pons ↗
-        </a>
-      )}
-    </div>
-  );
-}
