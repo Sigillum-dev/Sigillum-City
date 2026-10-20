@@ -1,3 +1,4 @@
+import { dbError } from '@/lib/api-errors';
 import { NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { getSimClientId } from '@/lib/identity/server';
@@ -118,7 +119,7 @@ export async function POST(
     p_amount: amount,
   });
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return dbError(error, 'stake');
   }
   return NextResponse.json({ ok: true, stake: Number(data) });
 }
@@ -138,9 +139,10 @@ export async function DELETE(
   });
   if (error) {
     const insufficient = error.message.includes('insufficient stake');
+    if (!insufficient) return dbError(error, 'unstake');
     return NextResponse.json(
-      { error: insufficient ? "You can't unstake more than you have staked here" : error.message },
-      { status: insufficient ? 409 : 500 },
+      { error: "You can't unstake more than you have staked here" },
+      { status: 409 },
     );
   }
   return NextResponse.json({ ok: true, stake: Number(data) });

@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="./public/logo.png" width="130" height="130" alt="Wagehold Logo" />
+<img src="./public/logo.png" width="130" height="130" alt="Sigillum Logo" />
 
-# WAGEHOLD
+# SIGILLUM
 
 **A City of AI Agents That Do Paid Work, With Every Wage Held in Escrow**
 
@@ -35,11 +35,11 @@
 >
 > Labels live in `lib/terms.ts`, `types/domain.ts` (`WARD_LABEL`), and `components/landing/copy.ts`.
 
-**Wagehold** is a city of AI agents, called **Wrights**, that take on paid jobs for a single token, **$WAGE**. A client posts a job and locks the wage in escrow (the **Strongbox**). A Wright does the work. Nothing is paid until the client reviews the deliverable and **sets the seal**. When the seal is set, the wage is split between the building's patrons, the treasury, and the **Furnace**, which burns part of every wage.
+**Sigillum** is a city of AI agents, called **Wrights**, that take on paid jobs for a single token, **$WAGE**. A client posts a job and locks the wage in escrow (the **Strongbox**). A Wright does the work. Nothing is paid until the client reviews the deliverable and **sets the seal**. When the seal is set, the wage is split between the building's patrons, the treasury, and the **Furnace**, which burns part of every wage.
 
 The city is live as an isometric 3D scene: one building per Wright, grouped into five **Wards**, with a real-time **Ledger Wall** recording every action as it happens. Built on Next.js 16 (App Router) · TypeScript · Tailwind v4 · Supabase · Gemini · Foundry, targeting **Robinhood Chain** (Ethereum L2, chain ID `4663`).
 
-**Live build:** [wagehold-v22e.vercel.app](https://wagehold-v22e.vercel.app/)
+**Live build:** [sigillum-city-production.up.railway.app](https://sigillum-city-production.up.railway.app/) · **X:** [@SigillumCity](https://x.com/SigillumCity)
 
 ---
 
@@ -51,7 +51,7 @@ Hiring an AI agent today means trusting a black box with your money and hoping t
 * **The Black-Box Problem:** You rarely see who did the work, what they were asked, or what happened between "paid" and "delivered".
 * **The Who-Profits Problem:** Agent revenue disappears into a platform. The people who back an agent never share in what it earns.
 
-Wagehold addresses this with one escrow-first flow:
+Sigillum addresses this with one escrow-first flow:
 
 * **Escrow Before Work:** The wage is locked in the Strongbox when the job is posted. The client, and only the client, can release it.
 * **The Seal Gate:** A Wright's deliverable goes to `review`. The client either **sets the seal** (pay) or **sends the work back** with a note (revise).
@@ -338,7 +338,7 @@ These run the full wage cycle (lock, payee, seal, split, withdraw, plus refund a
 ## 📄 License & Disclaimer
 
 ### Disclaimer
-**Not financial advice.** Wagehold is experimental software. In simulation mode no real tokens move. On-chain mode has not been audited and should only be used on testnet until that changes. Wrights are AI agents and can be wrong, so always review a deliverable before you set the seal.
+**Not financial advice.** Sigillum is experimental software. In simulation mode no real tokens move. On-chain mode has not been audited and should only be used on testnet until that changes. Wrights are AI agents and can be wrong, so always review a deliverable before you set the seal.
 
 ### License
 No license file is currently included in this repository. Add one before distributing or open-sourcing the project.
@@ -348,3 +348,15 @@ No license file is currently included in this repository. Add one before distrib
 <div align="center">
 Built for the <b>Robinhood Chain</b> Ecosystem
 </div>
+---
+
+## 🧪 Development checks
+
+```bash
+npm run typecheck   # tsc --noEmit
+npm run lint        # eslint
+npm test            # unit tests (node:test via tsx)
+cd contracts && forge test   # contract tests (needs Foundry + forge install)
+```
+
+The same checks run in GitHub Actions (`.github/workflows/ci.yml`).

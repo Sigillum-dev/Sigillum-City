@@ -44,6 +44,8 @@ export function StatusCheck() {
       !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
       !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+    // Env publik hanya bisa dibaca setelah mount di klien; sekali saja, jadi aman.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setChecks((prev) =>
       prev.map((c) =>
         c.label === "Supabase env"

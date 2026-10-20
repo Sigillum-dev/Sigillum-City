@@ -1,3 +1,4 @@
+import { dbError } from "@/lib/api-errors";
 import { NextResponse, after } from 'next/server';
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import { createJob, listJobs } from '@/lib/supabase/queries';
@@ -58,7 +59,7 @@ export async function GET(request: Request) {
   const { data, error } = await listJobs(supabase, statuses);
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return dbError(error, "/api/jobs");
   }
 
   return NextResponse.json({ jobs: data });
@@ -238,7 +239,7 @@ export async function POST(request: Request) {
   });
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return dbError(error, "/api/jobs");
   }
 
   // Fase 3 item 4: kelima Ward sekarang hidup (dulu cuma Research Ward,
