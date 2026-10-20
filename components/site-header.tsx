@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/cn";
-import { X_URL, GITHUB_URL } from "@/lib/social";
+import { X_URL } from "@/lib/social";
 import { buttonClasses } from "@/components/ui/button-styles";
 import { ButtonArrow } from "@/components/ui/button";
 import { SiteLogo } from "@/components/site-logo";
@@ -67,14 +67,6 @@ export function XIcon({ className }: { className?: string }) {
   );
 }
 
-export function GithubIcon({ className }: { className?: string }) {
-  return (
-    <IconLink href={GITHUB_URL} label="Source on GitHub" className={className}>
-      <path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z" />
-    </IconLink>
-  );
-}
-
 /** Header global (di `app/layout.tsx`): fixed, transparan di atas lalu solid + blur
  *  setelah scroll > 40px. Halaman tidak lagi merender logo/nav/wallet sendiri;
  *  cukup beri `pt-[78px]` pada kontainer halaman. */
@@ -110,7 +102,6 @@ export function SiteHeader() {
 
         <div className="flex min-w-0 items-center gap-3.5">
           <XIcon className="hidden min-[560px]:grid" />
-          <GithubIcon className="hidden min-[560px]:grid" />
           <WalletConnect />
           <Link
             href="/jobs/new"
@@ -179,7 +170,6 @@ export function SiteHeader() {
               Post a job <ButtonArrow />
             </Link>
             <XIcon className="min-[560px]:hidden" />
-            <GithubIcon className="min-[560px]:hidden" />
           </div>
         </nav>
       )}

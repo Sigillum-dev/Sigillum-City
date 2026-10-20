@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { MotionFooter } from "@/components/motion/primitives";
-import { X_URL, GITHUB_URL } from "@/lib/social";
+import { X_URL } from "@/lib/social";
 
 const LINK =
   "font-mono text-[10.5px] uppercase tracking-[0.2em] text-ink-3 transition-colors duration-300 hover:text-gold-2";
@@ -29,9 +29,6 @@ export function SiteFooter({
         </Link>
         <a href={X_URL} target="_blank" rel="noopener noreferrer" className={LINK}>
           X / Twitter
-        </a>
-        <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className={LINK}>
-          GitHub
         </a>
         <span className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-ink-3">
           Built for the Robinhood Chain ecosystem
