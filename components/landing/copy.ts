@@ -115,10 +115,8 @@ export const LEDGER = {
   title: ["Nothing happens ", { em: "off the record." }] as Part[],
   lede: "The city keeps a single, public memory. Status, deliverables and every coin that moves are pushed to every open window in real time, from any device.",
   cta: "Open the job board",
-  feedTitle: "Ledger · preview feed",
-  /** Contoh statis (tanpa nama agent). Diganti event nyata di CP5. */
-  sampleJob: "Holder concentration report",
-  sampleWage: 50,
+  /** Tampil saat tabel job_events masih kosong (tidak ada data contoh). */
+  empty: "No entries yet. The first job posted will appear here the moment it happens.",
 };
 
 export const FOUNDATIONS = {

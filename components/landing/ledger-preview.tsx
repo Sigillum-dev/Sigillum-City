@@ -15,33 +15,13 @@ import {
 } from "@/components/landing/ledger-events";
 import { createClient } from "@/lib/supabase/client";
 import { useRealtimeChanges } from "@/lib/supabase/realtime";
-import { WAGE_SPLIT, WAGE_UNIT } from "@/lib/currency";
 
 const MAX_ROWS = 6;
-const { sampleJob: JOB, sampleWage: WAGE } = LEDGER;
-const Q = `\u201C${JOB}\u201D`;
-const burned = ((WAGE * WAGE_SPLIT.furnacePct) / 100).toFixed(1);
-
-/** Contoh bila belum ada event nyata (database kosong / Supabase tak terjangkau). */
-const SAMPLE = [
-  { time: "14:21:09", label: "Reactor", color: "var(--color-ember)", text: `${burned} ${WAGE_UNIT} burned in the Reactor from ${Q}.` },
-  {
-    time: "14:21:09",
-    label: "Sigil",
-    color: "#9DBDB5",
-    text: `Sigil pressed on ${Q}. ${WAGE} ${WAGE_UNIT} released: ${WAGE_SPLIT.patronsPct}% patrons, ${WAGE_SPLIT.lampOilPct}% grid, ${WAGE_SPLIT.tithePct}% civic, ${WAGE_SPLIT.furnacePct}% burned.`,
-  },
-  { time: "14:19:42", label: "Review", color: "var(--color-lav)", text: `A mind delivered ${Q}. Awaiting the Sigil.` },
-  { time: "14:12:05", label: "Revise", color: "#D4A07E", text: `Client sent ${Q} back with a note. The mind is revising.` },
-  { time: "14:03:27", label: "Route", color: "var(--color-ice)", text: `The district Steward routed ${Q} to a mind.` },
-  { time: "14:03:26", label: "Vault", color: "var(--color-gold)", text: `${WAGE} ${WAGE_UNIT} locked in the Vault for ${Q}.` },
-];
-
 const byNewest = (a: LandingEvent, b: LandingEvent) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0);
 const visible = (e: LandingEvent) => describeEvent(e) !== null;
 
 /** Feed Ledger di landing: event nyata dari server (listRecentEvents) + Supabase Realtime
- *  (hook `useRealtimeChanges` yang sudah ada). Kosong -> contoh statis berlabel "Sample". */
+ *  (hook `useRealtimeChanges` yang sudah ada). Kosong -> keadaan kosong (tanpa data contoh). */
 export function LedgerPreview({ initialEvents }: { initialEvents: LandingEvent[] }) {
   const [events, setEvents] = useState(() =>
     initialEvents.filter(visible).sort(byNewest).slice(0, MAX_ROWS)
@@ -94,7 +74,7 @@ export function LedgerPreview({ initialEvents }: { initialEvents: LandingEvent[]
         const line = describeEvent(e)!;
         return { key: e.id, time: formatClockUTC(e.at), ...line };
       })
-    : SAMPLE.map((s, i) => ({ key: String(i), ...s }));
+    : [];
 
   return (
     <Section id="ledger">
@@ -114,13 +94,18 @@ export function LedgerPreview({ initialEvents }: { initialEvents: LandingEvent[]
           <div className="py-2">
             <div className="flex items-center justify-between border-b border-line-2 px-6 py-4">
               <span className="font-mono text-[10.5px] uppercase tracking-[0.24em] text-ink-3">
-                {live ? "Ledger · live feed · UTC" : LEDGER.feedTitle}
+                Ledger · live feed · UTC
               </span>
               <span className="inline-flex items-center gap-[7px] font-mono text-[10px] uppercase tracking-[0.2em] text-ice">
                 <i aria-hidden className="size-1.5 animate-beacon rounded-full bg-ice shadow-[0_0_10px_var(--color-ice)]" />
-                {live ? "Streaming" : "Sample"}
+                {live ? "Streaming" : "Waiting"}
               </span>
             </div>
+            {!live && (
+              <p className="px-6 py-10 text-center text-[13.5px] text-ink-3">
+                {LEDGER.empty}
+              </p>
+            )}
             <ol className="list-none">
               {rows.map((e) => (
                 <li

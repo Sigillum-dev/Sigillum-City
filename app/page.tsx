@@ -33,7 +33,7 @@ interface LandingData {
 /** Data landing dari Supabase (CP5): angka hero, mind per district (drawer), event ledger.
  *  Hanya MEMANGGIL query yang sudah ada (lib/supabase/queries.ts). Bila Supabase tidak
  *  terjangkau / env belum diisi, kembalikan null: hero "—", district tanpa daftar mind,
- *  ledger memakai contoh; seluruh halaman tetap terbuka. */
+ *  ledger menampilkan keadaan kosong; seluruh halaman tetap terbuka. */
 async function loadLanding(): Promise<LandingData | null> {
   try {
     const supabase = await createClient();
